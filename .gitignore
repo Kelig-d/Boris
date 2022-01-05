@@ -1,0 +1,5 @@
+.env
+drivers/*
+images/*
+videos/*
+methods/__pycache__
