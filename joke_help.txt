@@ -1,0 +1,3 @@
+Vous pouvez paramétrer les blagues du bot :
+    Vous pouvez spécifier un mot-clé pour la blague en ajoutant ce mot à la commande
+    Vous pouvez demander plusieurs blagues en indiquant un chiffre

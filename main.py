@@ -4,6 +4,7 @@ import random
 from dotenv import load_dotenv
 from pathlib import Path
 import os
+from methods.jokes import GetJoke
 from methods.image_improver import ImageImprover
 from methods.tiktok_to_video import TiktokToVideo
 from methods.get_link import GetLink
@@ -23,6 +24,7 @@ for i in range(0,len(keywords)):
     mots.append(keywords[i][0:len(keywords[i])-1])
 
 help_section = open("help.txt","r",encoding="utf-8")
+joke_help = open("joke_help.txt","r",encoding="utf-8")
 @client.event
 async def on_ready():
     print("Le bot est prêt !")
@@ -60,6 +62,20 @@ async def on_message(message):
             await message.channel.send("Voici ton image améliorée",file=discord.File(r'images/image_improved.jpg'))
         else:
             await message.channel.send("Tu dois mettre une image avec")
+    if message.content.startswith("+jokehelp"):
+        await message.channel.send(joke_help.read())
+    elif message.content.startswith("+joke"):
+        message_segments = message.content.split(" ")
+        try:
+            argument = message_segments[1]
+            try:
+                argument2 = message_segments[2]
+            except Exception:
+                argument2 = ""
+        except Exception:
+            argument = ""
+            argument2 = ""
+        await message.channel.send(GetJoke(argument, argument2))
     if message.content.startswith("+boris help"):
         await message.channel.send(help_section.read())
 
