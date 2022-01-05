@@ -1,0 +1,4 @@
+Bonjour, et bienvenue dans la page d'aide de Boris.
+Boris ne fais actuellement pas beaucoup de choses:
+-Il sait convertir les liens tiktok vers une vidéo mp4
+-Il sait améliorer des images grâce à la commande +image suivie de votre image
