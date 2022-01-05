@@ -1,5 +1,5 @@
 .env
-drivers/*
+drivers/chromedriver.exe
 images/*
 videos/*
 methods/__pycache__
