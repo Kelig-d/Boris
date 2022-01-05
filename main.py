@@ -7,7 +7,12 @@ import requests
 import base64
 import json
 from methods.link_test import linkTest
+from dotenv import load_dotenv
+from pathlib import Path
+import os
 
+dotenv_path = Path('.env/.env')
+load_dotenv(dotenv_path=dotenv_path)
 client = discord.Client()
 keywords = open("keywords/hello.txt","r").readlines()
 mots = []
@@ -41,13 +46,14 @@ async def on_message(message):
     if message.content.startswith("+image"):
         is_valid = False
         link = linkTest(message.content)
-        link_segments = link[0].split(".")
-        image_extension = link_segments[len(link_segments)-1]
-        valid_extensions = ["jpg","png","gif","jpeg"]
-        for i in range(0,len(valid_extensions)):
-            if image_extension == valid_extensions[i]:
-                is_valid = True
-                break
+        if link:
+            link_segments = link[0].split(".")
+            image_extension = link_segments[len(link_segments)-1]
+            valid_extensions = ["jpg","png","gif","jpeg"]
+            for i in range(0,len(valid_extensions)):
+                if image_extension == valid_extensions[i]:
+                    is_valid = True
+                    break
         if message.attachments or (link and is_valid):
             await message.channel.send("Attends que l'image soit analysée")
             if link:
@@ -85,4 +91,4 @@ async def on_message(message):
             await message.channel.send("Tu dois mettre une image avec")
 
 
-client.run("OTI3ODk3Mzk0OTAzOTIwNjYw.YdQ5yg.0q7xwQI8r_bFHqUSEDmfrGN_fFY")
+client.run(os.getenv('TOKEN'))
