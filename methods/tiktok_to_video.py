@@ -1,14 +1,9 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
 import urllib.request
+from TikTokApi import TikTokApi
 
-def TiktokToVideo(message):
-    driver = webdriver.Chrome("drivers/chromedriver.exe")
-    link = ""
-    driver.get(message.content)
-    while link == "":
-        try:
-            link = driver.find_element(By.CSS_SELECTOR,'.tiktok-lkdalv-VideoBasic.e1yey0rl4').get_attribute('src')
-        except Exception:
-            link = ""
-    urllib.request.urlretrieve(link, 'tiktok.mp4')
+def TiktokToVideo(link):
+    api = TikTokApi.get_instance()
+
+    tiktok = api.get_tiktok_by_url(url=link, custom_verifyFp="verify_ky2rdaop_V2qTzwqt_UDBs_4APu_81Cm_U8Qi5aXVKGSG")
+    link = tiktok["itemInfo"]["itemStruct"]["video"]["downloadAddr"]
+    urllib.request.urlretrieve(link, 'videos/tiktok.mp4')

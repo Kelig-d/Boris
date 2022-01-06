@@ -6,6 +6,8 @@ import json
 def ImageImprover(link, image):
             if link:
                 image_url = link[0]
+                link_segments = link[0].split(".")
+                image_extension = link_segments[len(link_segments)-1]
             else:
                 image_url = image.url
                 image_segment = image_url.split(".")

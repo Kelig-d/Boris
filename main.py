@@ -8,6 +8,7 @@ from methods.jokes import GetJoke
 from methods.image_improver import ImageImprover
 from methods.tiktok_to_video import TiktokToVideo
 from methods.get_link import GetLink
+import asyncio
 
 #Environment variable import (bot token)
 #.env file is in .env folder. It's the python environment
@@ -16,7 +17,6 @@ load_dotenv(dotenv_path=dotenv_path)
 
 #Discord client creation
 client = discord.Client()
-
 #Hello message Processing
 keywords = open("keywords/hello.txt","r").readlines()
 mots = []
@@ -40,8 +40,10 @@ async def on_message(message):
             await message.channel.send(mots[random.randint(0,len(mots)-1)])
             break
     #If a user send tiktok video, the bot will download it and resend in .mp4 format to play it on discord
-    if message.content.startswith("https://vm.tiktok.com"):
-        TiktokToVideo(message.content)
+    if "https" in message.content and "tiktok" in message.content:
+        link = GetLink(message.content)
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, TiktokToVideo, link[0])
         await message.delete()
         await message.channel.send(file=discord.File(r'videos/tiktok.mp4'))
     #The bot will get the image with this command and improve it with the real ESRGAN via an API 
@@ -55,16 +57,20 @@ async def on_message(message):
             for i in range(0,len(valid_extensions)):
                 if image_extension == valid_extensions[i]:
                     is_valid = True
+                    image = ""
                     break
+        else:
+            link =""
+            image = message.attachments[0]
         if message.attachments or (link and is_valid):
             await message.channel.send("Attends que l'image soit analysée")
-            ImageImprover(link, message.attachments[0])
+            ImageImprover(link, image)
             await message.channel.send("Voici ton image améliorée",file=discord.File(r'images/image_improved.jpg'))
         else:
             await message.channel.send("Tu dois mettre une image avec")
     if message.content.startswith("+jokehelp"):
         await message.channel.send(joke_help.read())
-    elif message.content.startswith("+joke"):
+    elif message.content.startswith("+j"):
         message_segments = message.content.split(" ")
         try:
             argument = message_segments[1]
